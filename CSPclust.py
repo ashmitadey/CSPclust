@@ -6,6 +6,7 @@ sc.settings.verbosity = 0             # verbosity: errors (0), warnings (1), inf
 sc.logging.print_header()
 sc.settings.set_figure_params(dpi=80, facecolor='white')
 
+
 def process(adata):
     adata.var_names_make_unique()
     sc.pl.highest_expr_genes(adata, n_top=20, save='.pdf')
