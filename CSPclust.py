@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import scanpy as sc
+import requests, json
 
 sc.settings.verbosity = 0             # verbosity: errors (0), warnings (1), info (2), hints (3)
 sc.logging.print_header()
@@ -100,9 +101,9 @@ def getpathways(adata):
     
     final_matrix
     gene_pathway_matrix = final_matrix.transpose()
-    return gene_pathway_matrix, adatacheck, all_pathways, all_genes, genesyms
+    return gene_pathway_matrix, adatacheck, all_pathways, genesyms, found_pathways
 
-def compute_clusters(gene_pathway_matrix, adatacheck,  all_pathways, all_genes, genesyms):
+def compute_clusters(gene_pathway_matrix, adatacheck, all_pathways, genesyms, found_pathways):
     c = np.corrcoef(adatacheck.to_numpy().astype('float64'), gene_pathway_matrix.to_numpy().astype('float64'))
     
     pd.DataFrame(c).to_csv('./corrmatrix.csv')
@@ -157,5 +158,5 @@ def compute_clusters(gene_pathway_matrix, adatacheck,  all_pathways, all_genes, 
         pathwaylisttemp = pd.Series(matnew2[matnew2['Cluster'] == str(i)]['Pathway'][:8].tolist())
     #for ipathway in pathwaylisttemp:
         sc.pl.violin(adatanew, pathwaylisttemp, groupby='leiden')
-    sc.pl.violin(adatanew, ['HIF-1 signaling pathway  '], groupby='leiden', save='.pdf')
+    # sc.pl.violin(adatanew, ['HIF-1 signaling pathway  '], groupby='leiden', save='.pdf')
     return adatanew
